@@ -73,20 +73,14 @@ def addBilder2Db(Pfad, EmptyDatabase = False):
     PfadId = int(Antwort[0])
     Dateien = os.listdir((Pfad+"/"))
     Dateien.sort()
-    print "Scanne Dateien .",
-    Zaehler = 0
     for Datei in Dateien:
-        if Zaehler == 1000:
-            Zaehler = 0
-            print ".",
-        Zaehler +=1 
         if Datei.endswith(".jpg"):
             if EmptyDatabase == False:
                 SQL="SELECT Count(*) FROM Bilder WHERE Name = '%s' AND Pfad = '%s' "%(Datei, PfadId)
                 cursor.execute(SQL)
                 Antwort = cursor.fetchone()
             else:
-                Antwort = None
+                Antwort = 0
                 
             if Antwort == 0:
                 Md5 = md5ForFile('%s/%s'%(Pfad,Datei))
@@ -125,8 +119,6 @@ def addPath2Db(Pfad):
         SELECT = "SELECT * FROM Verzeichnisse WHERE Pfad = '%s'" %Pfad
         cursor.execute(SELECT)
         Antwort = cursor.fetchone()
-    print ('Debug')
-    
         
 def ReadDatabaseSettings():
     DbHost = ''
